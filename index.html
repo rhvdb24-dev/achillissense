@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AchillisSense — Smart Achilles Tape</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0a1628;
+  --blue: #1a4fd6;
+  --blue-light: #3a6ff0;
+  --cyan: #00e5cc;
+  --cyan-dim: rgba(0,229,204,0.15);
+  --white: #ffffff;
+  --gray: #e8ecf2;
+  --gray-dark: #8a95a8;
+  --accent: #ff6b35;
+  --success: #2ecc71;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--white);
+  color: var(--navy);
+  overflow-x: hidden;
+}
+
+/* ── FICTIONAL BANNER ── */
+.fictional-banner {
+  background: var(--accent);
+  color: var(--white);
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.5px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 38px; left: 0; right: 0; z-index: 100;
+  background: rgba(10,22,40,0.95);
+  backdrop-filter: blur(12px);
+  padding: 0 40px;
+  height: 70px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid var(--blue);
+}
+.nav-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900; font-size: 1.5rem;
+  color: var(--white);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--cyan); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--gray-dark); text-decoration: none;
+  font-size: 0.9rem; font-weight: 600;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--blue);
+  color: var(--white) !important;
+  padding: 10px 24px;
+  border-radius: 6px;
+  transition: background 0.3s !important;
+}
+.nav-cta:hover { background: var(--blue-light) !important; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; align-items: center;
+  padding: 150px 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(0,229,204,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -30%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(26,79,214,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-content {
+  max-width: 600px;
+  position: relative; z-index: 2;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0,229,204,0.4);
+  color: var(--cyan);
+  font-size: 0.8rem; font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: fadeInUp 0.8s ease;
+}
+.hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 4.5rem; font-weight: 900;
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 12px;
+  animation: fadeInUp 0.8s 0.1s ease both;
+}
+.hero h1 span { color: var(--cyan); }
+.hero-tagline {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem; font-weight: 600;
+  color: var(--cyan);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s 0.2s ease both;
+}
+.hero p {
+  color: var(--gray-dark);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 520px;
+  animation: fadeInUp 0.8s 0.3s ease both;
+}
+.hero-buttons {
+  display: flex; gap: 16px;
+  animation: fadeInUp 0.8s 0.4s ease both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer; border: none;
+}
+.btn-primary {
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: 0 4px 24px rgba(26,79,214,0.4);
+}
+.btn-primary:hover {
+  background: var(--blue-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(26,79,214,0.5);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+.btn-outline:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ── PHONE MOCKUPS ── */
+.hero-visual {
+  position: absolute;
+  right: 40px; top: 50%; transform: translateY(-50%);
+  z-index: 2;
+  display: flex; gap: 24px;
+  animation: fadeInRight 1s 0.5s ease both;
+}
+.phone {
+  width: 260px; height: 530px;
+  background: #1a1a2e;
+  border: 3px solid #3a3a5c;
+  border-radius: 36px;
+  padding: 12px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+.phone-inner {
+  width: 100%; height: 100%;
+  background: #0c0c1a;
+  border-radius: 26px;
+  padding: 32px 14px 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.phone-status {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.6rem; color: var(--white);
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+.phone-status-right { display: flex; gap: 4px; align-items: center; }
+.conn-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  font-family: 'Montserrat', sans-serif;
+}
+.conn-bar.disconnected {
+  background: rgba(255,80,80,0.15);
+  border: 1px solid rgba(255,80,80,0.4);
+  color: #ff5050;
+}
+.conn-bar.connected {
+  background: rgba(0,229,204,0.12);
+  border: 1px solid rgba(0,229,204,0.4);
+  color: var(--cyan);
+}
+.conn-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.disconnected .conn-dot { background: #ff5050; }
+.connected .conn-dot { background: var(--cyan); animation: pulse 2s infinite; }
+.conn-icon {
+  width: 18px; height: 18px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.5rem;
+  margin-left: auto;
+}
+.recovery-title {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--white);
+  font-size: 1rem; font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.recovery-pct-big {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--white);
+  font-size: 3.2rem; font-weight: 900;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.foot-visual {
+  width: 100%; height: 120px;
+  background: linear-gradient(135deg, rgba(255,140,50,0.3), rgba(0,229,204,0.2));
+  border-radius: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.foot-visual svg { width: 80px; height: 80px; opacity: 0.8; }
+.advice-box {
+  background: rgba(0,229,204,0.08);
+  border: 1px solid rgba(0,229,204,0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--cyan);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.progress-bar-screen {
+  height: 5px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.progress-fill-cyan {
+  height: 100%; width: 97%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  border-radius: 3px;
+  animation: fillBarCyan 2s 1s ease both;
+}
+.screen-btn {
+  display: block; width: 100%;
+  background: transparent;
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-top: auto;
+}
+.session-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 6px;
+}
+.strain-meter {
+  width: 20px; height: 140px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.strain-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(to top, var(--blue), var(--cyan));
+  border-radius: 10px;
+}
+.strain-labels {
+  display: flex; flex-direction: column; justify-content: space-between;
+  height: 140px;
+  font-size: 0.48rem;
+  color: var(--gray-dark);
+  padding: 2px 0;
+}
+.session-data { text-align: right; flex: 1; }
+.data-label { font-size: 0.6rem; color: var(--gray-dark); font-weight: 600; }
+.data-value {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--white);
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.data-value.time { font-size: 1.2rem; }
+.data-unit { font-size: 0.65rem; color: var(--gray-dark); font-weight: 600; }
+.notif-pill {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: 0.52rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+.notif-green { background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.4); color: #2ecc71; }
+.notif-gold { background: rgba(241,196,15,0.15); border: 1px solid rgba(241,196,15,0.4); color: #f1c40f; }
+.notif-red { background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff5050; }
+.notifs-stack {
+  display: flex; flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--blue);
+  padding: 48px 60px;
+  display: flex; justify-content: center; gap: 80px;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem; font-weight: 900;
+  color: var(--white);
+}
+.stat-label { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 4px; }
+
+/* ── SECTIONS ── */
+section { padding: 100px 60px; }
+.section-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--blue);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem; font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+.section-desc {
+  color: var(--gray-dark);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* ── PROBLEM ── */
+.problem { background: var(--gray); }
+.problem-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; margin-top: 48px;
+}
+.problem-quote {
+  background: var(--white);
+  border-left: 4px solid var(--blue);
+  padding: 32px;
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: var(--navy);
+  line-height: 1.7;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.problem-cards { display: flex; flex-direction: column; gap: 16px; }
+.problem-card {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  display: flex; gap: 16px; align-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+}
+.problem-card:hover { transform: translateX(6px); }
+.problem-icon {
+  width: 48px; height: 48px;
+  background: rgba(26,79,214,0.1);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 1.3rem;
+}
+.problem-card p { font-size: 0.95rem; line-height: 1.5; }
+.problem-card strong { color: var(--blue); }
+
+/* ── HOW IT WORKS ── */
+.how-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 32px; margin-top: 56px;
+}
+.how-step {
+  text-align: center; padding: 40px 24px;
+  background: var(--gray); border-radius: 16px;
+  transition: all 0.3s; position: relative;
+}
+.how-step:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(26,79,214,0.12); }
+.step-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5rem; font-weight: 900;
+  color: rgba(26,79,214,0.1);
+  position: absolute; top: 12px; left: 24px;
+}
+.step-icon {
+  width: 64px; height: 64px;
+  background: var(--blue); border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+.step-icon svg { width: 28px; height: 28px; }
+.how-step h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; margin-bottom: 10px; font-size: 1.05rem; }
+.how-step p { color: var(--gray-dark); font-size: 0.9rem; line-height: 1.6; }
+
+/* ── LEVELS ── */
+.levels { background: var(--navy); color: var(--white); }
+.levels .section-title { color: var(--white); }
+.levels .section-desc { color: var(--gray-dark); }
+.levels-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 32px; margin-top: 56px;
+}
+.level-card {
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 40px 32px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.level-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--cyan);
+  transform: scaleX(0); transition: transform 0.3s;
+}
+.level-card:hover::before { transform: scaleX(1); }
+.level-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+.level-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900; font-size: 0.85rem;
+  color: var(--cyan); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.level-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.3rem; margin-bottom: 14px; }
+.level-card p { color: var(--gray-dark); line-height: 1.7; font-size: 0.95rem; }
+.level-features { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+.level-feat {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; color: rgba(255,255,255,0.7);
+}
+.level-feat::before { content: '✓'; color: var(--cyan); font-weight: 700; }
+
+/* ── PREORDER ── */
+.preorder { background: linear-gradient(160deg, var(--gray) 0%, #dce3f0 100%); }
+.preorder-container { max-width: 700px; margin: 0 auto; text-align: center; }
+.fictional-notice {
+  background: rgba(255,107,53,0.1);
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  font-size: 0.88rem;
+  color: #cc4a1a;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.fictional-notice strong { color: var(--accent); }
+.preorder-counter {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--navy); padding: 14px 32px;
+  border-radius: 50px; margin-bottom: 40px;
+}
+.counter-dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+.counter-text { color: var(--white); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.95rem; }
+.counter-text strong { color: var(--cyan); font-size: 1.2rem; }
+.preorder-form {
+  background: var(--white); padding: 48px;
+  border-radius: 20px; box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  text-align: left;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-family: 'Montserrat', sans-serif;
+  font-weight: 600; font-size: 0.85rem;
+  margin-bottom: 6px; color: var(--navy);
+}
+.form-group input, .form-group select {
+  width: 100%; padding: 14px 18px;
+  border: 2px solid var(--gray); border-radius: 10px;
+  font-family: 'Open Sans', sans-serif; font-size: 0.95rem;
+  transition: border-color 0.3s; background: var(--white);
+}
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--blue); }
+.form-price {
+  text-align: center; padding: 20px;
+  background: rgba(26,79,214,0.05); border-radius: 12px;
+  margin-bottom: 24px;
+}
+.form-price .price-label { color: var(--gray-dark); font-size: 0.85rem; }
+.form-price .price { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--navy); }
+.form-price .price-note { font-size: 0.8rem; color: var(--success); font-weight: 600; margin-top: 4px; }
+.btn-submit {
+  width: 100%; padding: 18px;
+  background: var(--blue); color: var(--white);
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem;
+  border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s;
+}
+.btn-submit:hover { background: var(--blue-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,79,214,0.35); }
+.form-success { display: none; text-align: center; padding: 40px 20px; }
+.form-success .check {
+  width: 72px; height: 72px; background: var(--success);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 2rem; color: var(--white);
+}
+.form-success h3 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+.form-success p { color: var(--gray-dark); line-height: 1.6; }
+
+/* ── ORDERS TABLE ── */
+.orders-section { margin-top: 48px; text-align: left; }
+.orders-section h3 {
+  font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 16px; text-align: center; color: var(--navy);
+}
+.orders-table-wrap {
+  background: var(--white); border-radius: 12px;
+  overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--navy); }
+th {
+  padding: 14px 20px; font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem; font-weight: 700; color: var(--white);
+  text-align: left; letter-spacing: 0.5px; text-transform: uppercase;
+}
+td { padding: 14px 20px; font-size: 0.9rem; border-bottom: 1px solid var(--gray); }
+tr:last-child td { border-bottom: none; }
+.empty-state { text-align: center; padding: 40px; color: var(--gray-dark); }
+.email-blurred {
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+  display: inline-block;
+}
+
+/* ── FOOTER ── */
+footer { background: var(--navy); padding: 60px; text-align: center; }
+.footer-logo { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; color: var(--white); margin-bottom: 8px; }
+.footer-logo span { color: var(--cyan); }
+.footer-tagline { color: var(--gray-dark); font-size: 0.9rem; margin-bottom: 16px; }
+.footer-fictional {
+  display: inline-block;
+  background: rgba(255,107,53,0.15);
+  border: 1px solid rgba(255,107,53,0.3);
+  color: var(--accent);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 6px 18px; border-radius: 20px;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+}
+.footer-info { color: rgba(255,255,255,0.4); font-size: 0.8rem; line-height: 1.8; }
+.footer-info a { color: var(--cyan); text-decoration: none; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInRight { from { opacity: 0; transform: translate(40px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
+@keyframes fillBarCyan { from { width: 0; } to { width: 97%; } }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) { .hero-visual { display: none; } }
+@media (max-width: 1024px) {
+  .hero h1 { font-size: 3.2rem; }
+  .how-grid { grid-template-columns: repeat(2, 1fr); }
+  .levels-grid { grid-template-columns: 1fr; max-width: 500px; }
+  .stats-bar { flex-wrap: wrap; gap: 40px; }
+}
+@media (max-width: 700px) {
+  section { padding: 60px 24px; }
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 130px 24px 60px; }
+  .hero h1 { font-size: 2.4rem; }
+  .hero-tagline { font-size: 1rem; }
+  .hero-buttons { flex-direction: column; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .preorder-form { padding: 28px; }
+  .stats-bar { padding: 32px 24px; gap: 24px; }
+  .section-title { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- FICTIONAL BANNER -->
+<div class="fictional-banner">⚠ Dit is een fictief product — deze pre-order pagina is niet echt en er wordt niets in rekening gebracht</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Achillis<span>Sense</span></div>
+  <ul class="nav-links">
+    <li><a href="#probleem">Het Probleem</a></li>
+    <li><a href="#werking">Hoe Het Werkt</a></li>
+    <li><a href="#levels">Levels</a></li>
+    <li><a href="#preorder" class="nav-cta">Pre-order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏃 Smart Recovery Technology</div>
+    <h1>Achillis<span>Sense</span></h1>
+    <div class="hero-tagline">Luister naar je lichaam voor het wederom te laat is</div>
+    <p>De slimme achillestape die je pees monitort, real-time feedback geeft en je begeleidt door een veilig herstelproces. Nooit meer onzekerheid tijdens het hardlopen.</p>
+    <div class="hero-buttons">
+      <a href="#preorder" class="btn btn-primary">Pre-order Nu →</a>
+      <a href="#werking" class="btn btn-outline">Meer Ontdekken</a>
+    </div>
+  </div>
+
+  <!-- TWO PHONE MOCKUPS matching the uploaded app screenshot -->
+  <div class="hero-visual">
+    <!-- Phone 1: Recovery / Home screen -->
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="phone-status">
+          <span>9:41</span>
+          <div class="phone-status-right"><span>📶</span><span>85%</span></div>
+        </div>
+        <div class="conn-bar disconnected">
+          <span class="conn-dot"></span>
+          <span>AchilliSense niet verbonden</span>
+          <span class="conn-icon">◉</span>
+        </div>
+        <div class="recovery-title">Pees Herstel</div>
+        <div class="recovery-pct-big">97%</div>
+        <div class="foot-visual">
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 15 C35 25, 25 45, 30 65 C33 75, 40 85, 50 90 C60 85, 67 75, 70 65 C75 45, 65 25, 50 15Z" fill="rgba(255,140,50,0.5)" stroke="rgba(0,229,204,0.8)" stroke-width="1.5"/>
+            <path d="M42 60 C42 55, 45 50, 50 48 C55 50, 58 55, 58 60" stroke="rgba(0,229,204,0.9)" stroke-width="2" fill="none"/>
+            <line x1="50" y1="48" x2="50" y2="30" stroke="rgba(0,229,204,0.6)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="advice-box">
+          Je pees is vandaag stabieler dan gister. Een rustige sessie op level 1 wordt aanbevolen.
+        </div>
+        <div class="progress-bar-screen">
+          <div class="progress-fill-cyan"></div>
+        </div>
+        <div class="screen-btn">START SESSIE</div>
+      </div>
+    </div>
+
+    <!-- Phone 2: Active session screen -->
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="phone-status">
+          <span>9:41</span>
+          <div class="phone-status-right"><span>📶</span><span>85%</span></div>
+        </div>
+        <div class="conn-bar connected">
+          <span class="conn-dot"></span>
+          <span>AchilliSense verbonden</span>
+          <span class="conn-icon">◉</span>
+        </div>
+        <div class="session-row">
+          <div style="display:flex;gap:6px;align-items:stretch;">
+            <div class="strain-labels">
+              <span>Hoge<br>Inspanning</span>
+              <span>Lage<br>Inspanning</span>
+            </div>
+            <div class="strain-meter"><div class="strain-fill"></div></div>
+          </div>
+          <div class="session-data">
+            <div class="data-label">Tijd</div>
+            <div class="data-value time">00:24:12</div>
+            <div style="height:8px"></div>
+            <div class="data-label">Afstand</div>
+            <div class="data-value">5.2 <span class="data-unit">km</span></div>
+            <div style="height:8px"></div>
+            <div class="data-label">Snelheid</div>
+            <div class="data-value">4.38<span class="data-unit">/km</span></div>
+          </div>
+        </div>
+        <div class="notifs-stack">
+          <div class="notif-pill notif-green">Level 2 is bijna binnen bereik</div>
+          <div class="notif-pill notif-gold">De spanning van de pees is op juist niveau</div>
+          <div class="notif-pill notif-red">De huidige kilometersnelheid is te hoog</div>
+        </div>
+        <div style="flex:1"></div>
+        <div class="screen-btn" style="border-color:#ff5050;color:#ff5050;">STOP SESSIE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">15%</div><div class="stat-label">van hardlopers raakt geblesseerd</div></div>
+  <div class="stat-item"><div class="stat-num">#1</div><div class="stat-label">blessure bij ultra-marathon lopers</div></div>
+  <div class="stat-item"><div class="stat-num">Langdurig</div><div class="stat-label">intensief herstelproces vereist</div></div>
+</div>
+
+<!-- PROBLEEM -->
+<section class="problem" id="probleem">
+  <div class="section-label">Het Probleem</div>
+  <div class="section-title">Achillespees blessures zijn<br>een hardnekkig probleem</div>
+  <div class="problem-grid">
+    <div class="problem-quote">
+      "Wanneer ik eerder een blessure heb gehad, wil ik inzicht in mijn lichaam tijdens het trainen, zodat ik blessures kan voorkomen, zonder constant onzeker te zijn over mijn lichaam."
+    </div>
+    <div class="problem-cards">
+      <div class="problem-card">
+        <div class="problem-icon">🤕</div>
+        <p><strong>15% van de hardlopers</strong> heeft ooit een achillespees blessure ervaren</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🏔️</div>
+        <p>De achillespees blessure is de <strong>#1 voorkomende blessure</strong> onder ultra-marathon lopers</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏳</div>
+        <p>De blessure eist een <strong>intensief & langdurig</strong> herstelproces</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOE WERKT HET -->
+<section id="werking">
+  <div class="section-label">De Oplossing</div>
+  <div class="section-title">Hoe werkt AchillisSense?</div>
+  <div class="section-desc">Van fysieke ondersteuning tot slimme data-analyse — alles in één product.</div>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="step-num">01</div>
+      <div class="step-icon"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+      <h3>Fysieke Ondersteuning</h3>
+      <p>De tape biedt directe ondersteuning aan de achillespees tijdens het bewegen</p>
+    </div>
+    <div class="how-step">
+      <div class="step-num">02</div>
+      <div class="step-icon"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+      <h3>Spanning Meten</h3>
+      <p>Sensoren meten continu de spanning op je achillespees tijdens het lopen</p>
+    </div>
+    <div class="how-step">
+      <div class="step-num">03</div>
+      <div class="step-icon"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <h3>Real-time Feedback</h3>
+      <p>Vibratie & visuele hints op je loopgedrag wanneer dat nodig is</p>
+    </div>
+    <div class="how-step">
+      <div class="step-num">04</div>
+      <div class="step-icon"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg></div>
+      <h3>Data & Trainingsschema</h3>
+      <p>Achteraf analyse van alle data met een persoonlijk trainingsschema</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEVELS -->
+<section class="levels" id="levels">
+  <div class="section-label">Herstel Levels</div>
+  <div class="section-title">Stap voor stap terug naar<br>volle kracht</div>
+  <div class="section-desc">Level 3 wordt beschikbaar na het voltooien van alle eerdere levels — voor een veilig en opbouwend herstel.</div>
+  <div class="levels-grid">
+    <div class="level-card">
+      <div class="level-num">Level 1</div>
+      <h3>Basis Herstel</h3>
+      <p>Begin met lichte activiteit onder volledige ondersteuning van de tape.</p>
+      <div class="level-features">
+        <div class="level-feat">Maximale fysieke ondersteuning</div>
+        <div class="level-feat">Continue monitoring</div>
+        <div class="level-feat">Waarschuwingen bij overbelasting</div>
+      </div>
+    </div>
+    <div class="level-card">
+      <div class="level-num">Level 2</div>
+      <h3>Opbouw Fase</h3>
+      <p>Verhoog geleidelijk de intensiteit met slimme begeleiding.</p>
+      <div class="level-features">
+        <div class="level-feat">Afnemende ondersteuning</div>
+        <div class="level-feat">Gedetailleerde spanning-analyse</div>
+        <div class="level-feat">Persoonlijk trainingsschema</div>
+      </div>
+    </div>
+    <div class="level-card">
+      <div class="level-num">Level 3</div>
+      <h3>Volledige Terugkeer</h3>
+      <p>Keer terug naar volledige training met vertrouwen in je lichaam.</p>
+      <div class="level-features">
+        <div class="level-feat">Minimale ondersteuning</div>
+        <div class="level-feat">Vrije training met monitoring</div>
+        <div class="level-feat">Preventie modus</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREORDER -->
+<section class="preorder" id="preorder">
+  <div class="preorder-container">
+    <div class="section-label">Pre-order</div>
+    <div class="section-title">Bestel als eerste de<br>AchillisSense</div>
+
+    <div class="fictional-notice">
+      <strong>⚠ Let op:</strong> Dit is een fictief product, ontwikkeld als onderdeel van een designproject aan de TU Delft. Deze pre-order is niet echt — er wordt niets in rekening gebracht en er vindt geen levering plaats.
+    </div>
+
+    <div class="section-desc" style="margin: 0 auto 32px;">Wees er vroeg bij en toon je interesse in de AchillisSense. Beperkte oplage.</div>
+
+    <div class="preorder-counter">
+      <div class="counter-dot"></div>
+      <div class="counter-text">Al <strong id="orderCount">0</strong> pre-orders geplaatst</div>
+    </div>
+
+    <div class="preorder-form" id="preorderForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Voornaam *</label>
+          <input type="text" id="fname" required placeholder="Bijv. Jan">
+        </div>
+        <div class="form-group">
+          <label>Achternaam *</label>
+          <input type="text" id="lname" required placeholder="Bijv. de Vries">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-mailadres *</label>
+        <input type="email" id="email" required placeholder="jan@voorbeeld.nl">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Schoenmaat</label>
+          <select id="shoesize">
+            <option value="">— Kies maat —</option>
+            <option>36-38</option>
+            <option>39-41</option>
+            <option>42-44</option>
+            <option>45-47</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Aantal</label>
+          <select id="quantity">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-price">
+        <div class="price-label">Pre-order prijs (fictief)</div>
+        <div class="price">€89,95</div>
+        <div class="price-note">✓ Early-bird korting — bespaar 20%</div>
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Pre-order Plaatsen →</button>
+    </div>
+
+    <div class="form-success" id="formSuccess">
+      <div class="check">✓</div>
+      <h3>Bedankt voor je interesse!</h3>
+      <p>Je fictieve pre-order is geregistreerd. Dit is een designproject — er wordt niets in rekening gebracht.</p>
+      <br>
+      <button class="btn btn-primary" onclick="resetForm()">Nog een pre-order plaatsen</button>
+    </div>
+
+    <!-- Orders overview -->
+    <div class="orders-section">
+      <h3>📋 Geplaatste Pre-orders</h3>
+      <div class="orders-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Naam</th>
+              <th>E-mail</th>
+              <th>Maat</th>
+              <th>Aantal</th>
+              <th>Datum</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr class="empty-state"><td colspan="6">Nog geen pre-orders geplaatst</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Achillis<span>Sense</span></div>
+  <div class="footer-tagline">Smart Achilles Tape — Luister naar je lichaam</div>
+  <div class="footer-fictional">⚠ Fictief product — TU Delft Design Project</div>
+  <div class="footer-info">
+    Raùl van den Beukel · 6280323<br>
+    <a href="mailto:rhvandenbeukel@tudelft.nl">rhvandenbeukel@tudelft.nl</a><br>
+    TU Delft — Design Project 2
+  </div>
+</footer>
+
+<script>
+const DB_KEY = 'achillissense_orders';
+
+function getOrders() {
+  try {
+    const data = localStorage.getItem(DB_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) { return []; }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem(DB_KEY, JSON.stringify(orders));
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function updateUI() {
+  const orders = getOrders();
+  document.getElementById('orderCount').textContent = orders.length;
+  const tbody = document.getElementById('ordersBody');
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr class="empty-state"><td colspan="6">Nog geen pre-orders geplaatst</td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.map((o, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${escapeHtml(o.name)}</td>
+      <td><span class="email-blurred">${escapeHtml(o.email)}</span></td>
+      <td>${escapeHtml(o.size || '—')}</td>
+      <td>${o.qty}</td>
+      <td>${o.date}</td>
+    </tr>
+  `).join('');
+}
+
+function submitOrder() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const size = document.getElementById('shoesize').value;
+  const qty = document.getElementById('quantity').value;
+
+  if (!fname || !lname || !email) { alert('Vul alsjeblieft alle verplichte velden in.'); return; }
+  if (!email.includes('@')) { alert('Vul een geldig e-mailadres in.'); return; }
+
+  const orders = getOrders();
+  orders.push({
+    name: fname + ' ' + lname,
+    email: email,
+    size: size,
+    qty: parseInt(qty),
+    date: new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' })
+  });
+  saveOrders(orders);
+
+  document.getElementById('preorderForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+  updateUI();
+}
+
+function resetForm() {
+  document.getElementById('fname').value = '';
+  document.getElementById('lname').value = '';
+  document.getElementById('email').value = '';
+  document.getElementById('shoesize').value = '';
+  document.getElementById('quantity').value = '1';
+  document.getElementById('preorderForm').style.display = 'block';
+  document.getElementById('formSuccess').style.display = 'none';
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+updateUI();
+</script>
+
+</body>
+</html>
